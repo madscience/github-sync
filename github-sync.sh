@@ -45,8 +45,11 @@ fi
 
 if [[ ! -z "$EXCLUDED_FILES" ]]; then
   git reset origin/master -- "${EXCLUDED_FILES}"
-  git commit --message="Revert changes to excluded files"
-  git clean -f
+
+  if output=$(git status --porcelain) && [[ ! -z "$output" ]]; then
+    git commit --message="Revert changes to excluded files"
+    git clean -f
+  fi
 fi
 
 git push origin "${DESTINATION_BRANCH}"
