@@ -4,6 +4,7 @@ set -e
 
 UPSTREAM_REPO=$1
 BRANCH_MAPPING=$2
+EXCLUDED_FILES=$3
 
 if [[ -z "$UPSTREAM_REPO" ]]; then
   echo "Missing \$UPSTREAM_REPO"
@@ -20,6 +21,9 @@ then
   UPSTREAM_REPO="https://github.com/${UPSTREAM_REPO}.git"
 fi
 
+SOURCE_BRANCH="${BRANCH_MAPPING%%:*}"
+DESTINATION_BRANCH="${BRANCH_MAPPING#*:}"
+
 echo "UPSTREAM_REPO=$UPSTREAM_REPO"
 echo "BRANCHES=$BRANCH_MAPPING"
 
@@ -28,6 +32,14 @@ git remote set-url origin "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHU
 git remote add tmp_upstream "$UPSTREAM_REPO"
 git fetch tmp_upstream
 git remote -v
-git push origin "refs/remotes/tmp_upstream/${BRANCH_MAPPING%%:*}:refs/heads/${BRANCH_MAPPING#*:}" -f
+git checkout -b "${DESTINATION_BRANCH}" "refs/remotes/tmp_upstream/${SOURCE_BRANCH}"
+
+if [[ ! -z "$EXCLUDED_FILES" ]]; then
+  git reset origin/master -- "${EXCLUDED_FILES}"
+  git commit --message="Revert changes to excluded files"
+  git clean -f
+fi
+
+git push origin "${DESTINATION_BRANCH}"
 git remote rm tmp_upstream
 git remote -v

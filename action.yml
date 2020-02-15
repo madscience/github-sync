@@ -14,6 +14,9 @@ inputs:
   destination_branch:
     description: Branch name to sync to in this repo
     required: true
+  excluded_files:
+    description: Files to be excluded from sync
+    required: false
   github_token:
     description: GitHub token secret
     required: true
@@ -25,3 +28,4 @@ runs:
   args:
     - ${{ inputs.source_repo }}
     - ${{ inputs.source_branch }}:${{ inputs.destination_branch }}
+    - ${{ inputs.excluded_files }}
