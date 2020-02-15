@@ -35,11 +35,11 @@ git remote set-url origin "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$GITHU
 echo "Adding tmp_upstream remote with URL: $UPSTREAM_REPO"
 git remote add tmp_upstream "$UPSTREAM_REPO"
 
-echo "Fetching from tmp_upstream remote..."
-git fetch tmp_upstream
-
 echo "Listing remotes:"
 git remote -v
+
+echo "Fetching from tmp_upstream remote..."
+git fetch tmp_upstream
 
 echo "Checking if branch ${DESTINATION_BRANCH} already exists on origin..."
 if git ls-remote --exit-code --heads origin "${DESTINATION_BRANCH}"; then
