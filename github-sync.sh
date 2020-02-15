@@ -48,7 +48,7 @@ if git ls-remote --exit-code --heads origin "${DESTINATION_BRANCH}"; then
   git checkout -b "${DESTINATION_BRANCH}" "refs/remotes/origin/${DESTINATION_BRANCH}"
 
   echo "Merging changes from refs/remotes/tmp_upstream/${SOURCE_BRANCH}..."
-  git merge --commit --no-edit -ff "refs/remotes/tmp_upstream/${SOURCE_BRANCH}"
+  git merge --commit --no-edit --ff "refs/remotes/tmp_upstream/${SOURCE_BRANCH}"
   # TODO: handle merge conflicts
 else
   echo "No existing branch. Checking out refs/remotes/tmp_upstream/${SOURCE_BRANCH} as ${DESTINATION_BRANCH}"
