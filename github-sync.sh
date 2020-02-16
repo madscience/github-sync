@@ -41,6 +41,10 @@ git remote -v
 echo "Fetching from tmp_upstream remote..."
 git fetch tmp_upstream
 
+echo "Setting commit author..."
+git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+git config --global user.name "github-sync"
+
 echo "Checking if branch ${DESTINATION_BRANCH} already exists on origin..."
 if git ls-remote --exit-code --heads origin "${DESTINATION_BRANCH}"; then
   echo "refs/remotes/origin/${DESTINATION_BRANCH} exists. Checking out as ${DESTINATION_BRANCH}..."
